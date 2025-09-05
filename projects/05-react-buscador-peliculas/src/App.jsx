@@ -1,23 +1,58 @@
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { Movies } from "./components/movies";
 import { useMovies } from "./hooks/use-movies";
-// import withNoResult from "./mocks/no-result.json";
+
+function useSearch() {
+  const [search, updateSearch] = useState("");
+  const [error, setError] = useState(null);
+  const isFirstInput = useRef(true);
+
+  useEffect(() => {
+    if (isFirstInput.current) {
+      isFirstInput.current = search === "";
+      return;
+    }
+
+    if (search === "") {
+      setError("No se puede buscar una pelicula vacía.");
+      return;
+    }
+
+    if (search.match(/^\d+$/)) {
+      setError("No se puede buscar una pelicula con un número.");
+      return;
+    }
+
+    if (search.length < 3) {
+      setError("La busqueda debe tener al menos 3 caracteres.");
+      return;
+    }
+
+    setError(null);
+  }, [search]);
+
+  return { search, updateSearch, error };
+}
 
 function App() {
-  const { movies } = useMovies();
-  const inputRef = useRef();
+  const { search, updateSearch, error } = useSearch();
 
-  // const handlerClick = () => {
-  //   const value = inputRef.current.value;
-  //   console.log(value);
-  // };
+  const { movies, getMovies } = useMovies({ search });
+  const counter = useRef(0); // valor que persiste entre renders
+  counter.current++;
+  console.log(counter.current);
+
+  const changeHandler = (event) => {
+    const newQuery = event.target.value;
+    if (newQuery.startsWith(" ")) return;
+
+    updateSearch(newQuery);
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    const fields = new FormData(event.target);
-    const query = fields.get("query");
-    console.log(query);
+    getMovies();
   };
 
   return (
@@ -26,13 +61,19 @@ function App() {
         <h1>Buscador de peliculas</h1>
         <form className="form" onSubmit={submitHandler}>
           <input
-            ref={inputRef}
             name="query"
+            value={search}
+            onChange={changeHandler}
             type="text"
             placeholder="Avengers, Star War, The Matrix..."
+            style={{
+              border: "solid 1px",
+              borderColor: error ? "red" : "transparent",
+            }}
           />
           <button type="submit">Buscar</button>
         </form>
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </header>
       <main>
         <Movies movies={movies} />
