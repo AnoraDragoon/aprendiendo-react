@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useCallback } from "react";
 import { searchMovies } from "../services/movies";
 // import withResults from "../mocks/result.json";
 // import withoutResults from "../mocks/no-result.json";
@@ -9,22 +9,20 @@ export function useMovies({ search, sort }) {
   const [error, setError] = useState(null);
   const previousSearch = useRef(search);
 
-  const getMovies = useMemo(() => {
-    return async ({ search }) => {
-      if (previousSearch.current === search) return;
+  const getMovies = useCallback(async ({ search }) => {
+    if (previousSearch.current === search) return;
 
-      try {
-        setLoading(true);
-        setError(null);
-        previousSearch.current = search;
-        const newMovies = await searchMovies({ search });
-        setMovies(newMovies);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      setLoading(true);
+      setError(null);
+      previousSearch.current = search;
+      const newMovies = await searchMovies({ search });
+      setMovies(newMovies);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const sortedMovies = useMemo(() => {
