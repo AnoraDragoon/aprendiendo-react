@@ -1,32 +1,30 @@
-import { useState } from "react";
-// import withResult from "../mocks/result.json";
-import withNoResult from "../mocks/no-result.json";
-import { API_URL } from "../environments/dev";
+import { useState, useRef } from "react";
+import { searchMovies } from "../services/movies";
+import {} from "react";
+// import withResults from "../mocks/result.json";
+// import withoutResults from "../mocks/no-result.json";
 
 export function useMovies({ search }) {
-  const [responseMovies, setResponseMovies] = useState([]);
-  const movies = responseMovies.Search ?? [];
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const previousSearch = useRef(search);
 
-  const mappedMovies = movies?.map((movie) => {
-    return {
-      id: movie.imdbID,
-      title: movie.Title,
-      year: movie.Year,
-      imgSrc: movie.Poster,
-      type: movie.Type,
-    };
-  });
+  const getMovies = async () => {
+    if (previousSearch.current === search) return;
 
-  const getMovies = () => {
-    if (search) {
-      fetch(`${API_URL}&s=${search}`)
-        .then((res) => res.json())
-        .then((json) => setResponseMovies(json));
-      // setResponseMovies(withResult);
-    } else {
-      setResponseMovies(withNoResult);
+    try {
+      setLoading(true);
+      setError(null);
+      previousSearch.current = search;
+      const newMovies = await searchMovies({ search });
+      setMovies(newMovies);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return { movies: mappedMovies, getMovies };
+  return { movies, getMovies, loading, error };
 }
