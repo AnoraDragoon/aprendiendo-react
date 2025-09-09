@@ -37,8 +37,9 @@ function useSearch() {
 
 function App() {
   const { search, updateSearch, error } = useSearch();
+  const [sort, setSort] = useState(false);
+  const { movies, getMovies, loading } = useMovies({ search, sort });
 
-  const { movies, getMovies, loading } = useMovies({ search });
   const counter = useRef(0); // valor que persiste entre renders
   counter.current++;
   console.log(counter.current);
@@ -53,6 +54,10 @@ function App() {
   const submitHandler = (event) => {
     event.preventDefault();
     getMovies();
+  };
+
+  const sortHandler = () => {
+    setSort(!sort);
   };
 
   return (
@@ -71,6 +76,7 @@ function App() {
               borderColor: error ? "red" : "transparent",
             }}
           />
+          <input type="checkbox" name="sort" value={sort} onChange={sortHandler} />
           <button type="submit">Buscar</button>
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}
