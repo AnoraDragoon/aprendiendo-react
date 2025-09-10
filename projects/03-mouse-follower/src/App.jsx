@@ -6,6 +6,9 @@ function App() {
   const [enabled, setEnabled] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  /**
+   * Effect to follow the pointer
+   */
   useEffect(() => {
     console.log("evect ", { enabled });
     const moveHandler = (event) => {
@@ -23,6 +26,16 @@ function App() {
     return () => {
       console.log("cleanup");
       window.removeEventListener("pointermove", moveHandler);
+    };
+  }, [enabled]);
+
+  /**
+   * Effect to hide cursor when follower is on.
+   */
+  useEffect(() => {
+    document.body.classList.toggle("no-cursor", enabled);
+    return () => {
+      document.body.classList.remove("no-cursor");
     };
   }, [enabled]);
 
