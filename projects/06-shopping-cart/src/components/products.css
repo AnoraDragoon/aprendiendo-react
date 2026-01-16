@@ -40,3 +40,8 @@
   object-fit: cover;
   background: #fff;
 }
+
+.remove-cart-button {
+  margin-right: 4px;
+  color: red;
+}

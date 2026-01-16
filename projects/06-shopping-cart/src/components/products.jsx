@@ -1,7 +1,10 @@
 import "./products.css";
-import { AddToCartIcon } from "./icons";
+import { AddToCartIcon, RemoveFromCartIcon } from "./icons";
+import { useCart } from "../hooks/use-cart";
 
 export function Products({ products }) {
+  const { cart, addToCart, removeFromCart } = useCart();
+
   return (
     <main className="products">
       <ul>
@@ -12,7 +15,22 @@ export function Products({ products }) {
               <strong>{product.title}</strong> - ${product.price}
             </div>
             <div>
-              <AddToCartIcon />
+              {cart.some((item) => item.id === product.id) && (
+                <button className="remove-cart-button"
+                  onClick={() => {
+                    removeFromCart(product);
+                  }}
+                >
+                  <RemoveFromCartIcon />
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  addToCart(product);
+                }}
+              >
+                <AddToCartIcon />
+              </button>
             </div>
           </li>
         ))}
