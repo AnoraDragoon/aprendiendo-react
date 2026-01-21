@@ -32,7 +32,11 @@ export function Cart() {
       <aside className="cart">
         <ul>
           {cart.map((item) => (
-            <CartItem product={item} addToCart={() => addToCart(item)} />
+            <CartItem
+              key={item.id}
+              product={item}
+              addToCart={() => addToCart(item)}
+            />
           ))}
         </ul>
 
