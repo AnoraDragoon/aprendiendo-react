@@ -1,30 +1,29 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import { EVENTS } from "./utils/consts";
 import { HomePage } from "./pages/home";
 import { AboutPage } from "./pages/about";
+import Page404 from "./pages/404";
 
+import { Router } from "./router";
+
+const routes = [
+  {
+    path: "/",
+    Component: HomePage,
+  },
+  {
+    path: "/about",
+    Component: AboutPage,
+  },
+  {
+    path: "/twitch",
+    Component: () => <h1>Nuevo Twitch</h1>,
+  },
+];
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(globalThis.location.pathname);
-
-  useEffect(() => {
-    const onLocationChange = () => {
-      setCurrentPath(window.location.pathname);
-    };
-    window.addEventListener(EVENTS.PUSHSTATE, onLocationChange);
-    window.addEventListener(EVENTS.POPSTATE, onLocationChange);
-
-    return () => {
-      window.removeEventListener(EVENTS.PUSHSTATE, onLocationChange);
-      window.removeEventListener(EVENTS.POPSTATE, onLocationChange);
-    };
-  }, []);
-
   return (
     <main>
-      {currentPath === "/" && <HomePage />}
-      {currentPath === "/about" && <AboutPage />}
+      <Router routes={routes} defaultComponent={Page404} />
     </main>
   );
 }
