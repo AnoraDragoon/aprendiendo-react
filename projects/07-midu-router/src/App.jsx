@@ -4,6 +4,7 @@ import { AboutPage } from "./pages/about";
 import Page404 from "./pages/404";
 
 import { Router } from "./router";
+import { Searchpage } from "./pages/search";
 
 const routes = [
   {
@@ -15,8 +16,8 @@ const routes = [
     Component: AboutPage,
   },
   {
-    path: "/twitch",
-    Component: () => <h1>Nuevo Twitch</h1>,
+    path: "/search/:query",
+    Component: Searchpage,
   },
 ];
 
