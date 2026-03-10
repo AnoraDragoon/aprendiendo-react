@@ -5,15 +5,13 @@ import Page404 from "./pages/404";
 
 import { Router } from "./router";
 import { Searchpage } from "./pages/search";
+import { Route } from "./route";
+import { TestPage } from "./pages/test";
 
 const routes = [
   {
     path: "/",
     Component: HomePage,
-  },
-  {
-    path: "/about",
-    Component: AboutPage,
   },
   {
     path: "/search/:query",
@@ -24,7 +22,10 @@ const routes = [
 function App() {
   return (
     <main>
-      <Router routes={routes} defaultComponent={Page404} />
+      <Router routes={routes} defaultComponent={Page404}>
+        <Route path="/about" Component={AboutPage} />
+        <Route path="/test" Component={TestPage} />
+      </Router>
     </main>
   );
 }
