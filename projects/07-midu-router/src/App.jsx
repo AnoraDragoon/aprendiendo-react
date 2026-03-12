@@ -1,12 +1,15 @@
 import "./App.css";
-import { HomePage } from "./pages/home";
-import { AboutPage } from "./pages/about";
-import Page404 from "./pages/404";
+import { lazy, Suspense } from "react";
 
 import { Router } from "./router";
-import { Searchpage } from "./pages/search";
 import { Route } from "./route";
-import { TestPage } from "./pages/test";
+
+import HomePage from "./pages/home";
+import Page404 from "./pages/404";
+
+const TestPage = lazy(() => import("./pages/test"));
+const AboutPage = lazy(() => import("./pages/about"));
+const Searchpage = lazy(() => import("./pages/search"));
 
 const routes = [
   {
@@ -22,10 +25,12 @@ const routes = [
 function App() {
   return (
     <main>
-      <Router routes={routes} defaultComponent={Page404}>
-        <Route path="/about" Component={AboutPage} />
-        <Route path="/test" Component={TestPage} />
-      </Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Router routes={routes} defaultComponent={Page404}>
+          <Route path="/:lang/about" Component={AboutPage} />
+          <Route path="/test" Component={TestPage} />
+        </Router>
+      </Suspense>
     </main>
   );
 }

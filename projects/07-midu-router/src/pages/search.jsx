@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export function Searchpage({ routeParams }) {
+export default function Searchpage({ routeParams }) {
   const counterRef = useRef(0);
   const [counter, setCounter] = useState(0);
 
