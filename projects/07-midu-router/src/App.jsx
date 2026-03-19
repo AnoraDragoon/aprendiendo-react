@@ -1,8 +1,7 @@
-import "./App.css";
 import { lazy, Suspense } from "react";
 
-import { Router } from "./router";
-import { Route } from "./route";
+import { Router } from "./components/router";
+import { Route } from "./components/route";
 
 import HomePage from "./pages/home";
 import Page404 from "./pages/404";

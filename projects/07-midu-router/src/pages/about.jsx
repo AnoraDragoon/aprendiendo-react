@@ -24,8 +24,10 @@ export default function AboutPage({ routeParams }) {
   return (
     <>
       <h1>{i18n.title}</h1>
-      <img src="/vite.svg" alt="Logo" />
-      <p>{i18n.description}</p>
+      <div>
+        <img src="/vite.svg" alt="Logo" />
+        <p>{i18n.description}</p>
+      </div>
       <Link to={"/"}>{i18n.button}</Link>
     </>
   );
