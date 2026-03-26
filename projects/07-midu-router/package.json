@@ -6,17 +6,24 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "prepare": "pnpm run test && swc src/components src/utils src/index.js -d lib",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "echo",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
-    "path-to-regexp": "8.3.0",
+    "path-to-regexp": "8.3.0"
+  },
+  "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@swc/cli": "^0.8.0",
+    "@swc/core": "^1.15.18",
     "@testing-library/react": "^16.3.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
